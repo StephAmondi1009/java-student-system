@@ -124,13 +124,17 @@ public class LibraryPanel extends JPanel {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 
                 if (!isSelected) {
-                    int available = Integer.parseInt(table.getValueAt(row, 5).toString());
-                    if (available == 0) {
-                        c.setBackground(new Color(255, 200, 200)); // Light red
-                    } else if (available <= 2) {
-                        c.setBackground(new Color(255, 255, 200)); // Light yellow
-                    } else {
-                        c.setBackground(new Color(200, 255, 200)); // Light green
+                    try {
+                        int available = Integer.parseInt(table.getValueAt(row, 5).toString());
+                        if (available == 0) {
+                            c.setBackground(new Color(255, 200, 200)); // Light red
+                        } else if (available <= 2) {
+                            c.setBackground(new Color(255, 255, 200)); // Light yellow
+                        } else {
+                            c.setBackground(new Color(200, 255, 200)); // Light green
+                        }
+                    } catch (Exception e) {
+                        c.setBackground(table.getBackground());
                     }
                 }
                 return c;
@@ -298,6 +302,8 @@ public class LibraryPanel extends JPanel {
             if (selectedBook != null) {
                 isbnField.setText(selectedBook.getIsbn());
                 titleField.setText(selectedBook.getTitle());
+                authorField.setText(selectedBook.getAuthor());
+                publisherField.setText(selectedBook.getPublisher());
                 editionField.setText(selectedBook.getEdition());
                 versionField.setText(selectedBook.getVersion());
                 yearField.setText(String.valueOf(selectedBook.getYearPublished()));
@@ -356,7 +362,7 @@ public class LibraryPanel extends JPanel {
                 performRealTimeSearch();
                 clearForm();
             } else {
-JOptionPane.showMessageDialog(this, "Failed to borrow book!\nCheck if student exists and book is available.", 
+                JOptionPane.showMessageDialog(this, "Failed to borrow book!\nCheck if student exists and book is available.", 
                     "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -388,7 +394,8 @@ JOptionPane.showMessageDialog(this, "Failed to borrow book!\nCheck if student ex
         
         String studentId = JOptionPane.showInputDialog(
             this,
-            "Enter Student Registration Number:\n(Book will be reserved when available)",            "Reserve Book",
+            "Enter Student Registration Number:\n(Book will be reserved when available)",
+            "Reserve Book",
             JOptionPane.QUESTION_MESSAGE
         );
         
@@ -405,6 +412,8 @@ JOptionPane.showMessageDialog(this, "Failed to borrow book!\nCheck if student ex
     private void clearForm() {
         isbnField.setText("");
         titleField.setText("");
+        authorField.setText("");
+        publisherField.setText("");
         editionField.setText("");
         versionField.setText("");
         yearField.setText("");

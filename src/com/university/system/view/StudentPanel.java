@@ -205,7 +205,9 @@ public class StudentPanel extends JPanel {
         List<Student> allStudents = controller.getAllStudents();
         List<Student> filteredStudents = new ArrayList<>();
         for (Student s : allStudents) {
-            if (s.getName().toLowerCase().contains(keyword.toLowerCase())) {
+            String fullName = (s.getFirstName() + " " + s.getLastName()).toLowerCase();
+            if (fullName.contains(keyword.toLowerCase()) || 
+                s.getRegistrationNumber().toLowerCase().contains(keyword.toLowerCase())) {
                 filteredStudents.add(s);
             }
         }
@@ -222,7 +224,7 @@ public class StudentPanel extends JPanel {
         for (Student student : students) {
             Object[] row = {
                 student.getRegistrationNumber(),
-                student.getName(),
+                student.getFirstName() + " " + student.getLastName(),
                 student.getEmail(),
                 student.getPhone(),
                 student.getProgramme(),
@@ -240,7 +242,7 @@ public class StudentPanel extends JPanel {
             
             if (student != null) {
                 regNumberField.setText(student.getRegistrationNumber());
-                nameField.setText(student.getName());
+                nameField.setText(student.getFirstName() + " " + student.getLastName());
                 emailField.setText(student.getEmail());
                 phoneField.setText(student.getPhone());
                 programmeField.setText(student.getProgramme());
@@ -345,7 +347,7 @@ public class StudentPanel extends JPanel {
         Student student = controller.getStudent(regNumber);
         
         if (student != null) {
-            if (student.getCourses().size() >= 5) {
+            if (controller.viewEnrolledCourses(student.getId()).size() >= 5) {
                 JOptionPane.showMessageDialog(
                     this,
                     "Student already enrolled in maximum 5 courses!",
